@@ -15,6 +15,9 @@ uwsgi.ini is the configuration file for uwsgi.
 
 Procfile will tell Heroku were to find the configuration files (uwsgi.ini)
 
+When you run uwsgi, it will not start at if __name__ == '__main__'. It will start at the beginning of the app.py file.
+This is why we need to make a separate file: run.py, or else we can cause circular imports.
+
 07/24/2019
 Jaime Quintero
 """
@@ -40,14 +43,6 @@ api = Api(app)
 app.config['JWT_AUTH_URL_RULE'] = '/login'
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=1800)
 app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-
-
-@app.before_first_request  # This will run the function below, before the first request.
-def create_tables():
-    # This will create this: 'sqlite:///data.db' and it's tables, unless it exists already.
-    # This will gather all table information from the models to help create them.
-    db.create_all()
-
 
 jwt = JWT(app, authenticate, identity_function)
 @jwt.auth_response_handler

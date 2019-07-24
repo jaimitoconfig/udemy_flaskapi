@@ -13,6 +13,8 @@ only added uwsgi.
 uWSGI is a full fledged http server.
 uwsgi.ini is the configuration file for uwsgi.
 
+Procfile will tell Heroku were to find the configuration files (uwsgi.ini)
+
 07/24/2019
 Jaime Quintero
 """

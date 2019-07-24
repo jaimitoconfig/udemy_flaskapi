@@ -1,3 +1,13 @@
+"""
+Using Heroku.
+
+NOTES:
+To avoid circular imports, we created this file that will run first to create the db.
+
+07/24/2019
+Jaime Quintero
+"""
+
 from app import app
 from db import db
 

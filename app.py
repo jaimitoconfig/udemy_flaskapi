@@ -18,9 +18,14 @@ Procfile will tell Heroku were to find the configuration files (uwsgi.ini)
 When you run uwsgi, it will not start at if __name__ == '__main__'. It will start at the beginning of the app.py file.
 This is why we need to make a separate file: run.py, or else we can cause circular imports.
 
+Will be switching to POSTGRESQL to avoid losing the data base when the Dyno goes to sleep.
+Add psycopg2 to communicate with POSTGRESQL. Even though we are not using it here.
+
 07/24/2019
+LAST EDITED: 07/25/19
 Jaime Quintero
 """
+import os
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt import JWT
@@ -33,7 +38,9 @@ from security import authenticate, identity as identity_function
 
 app = Flask(__name__)
 # Telling SQLALCHEMY what data base to use.
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # It can also be MySQL.
+# DATABASE_URL - Environment variable from Heroku to use POSTGRESQL DB.
+# As a back up we can still use the sqlite database - 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 # SQLAlchemy can check for object modifications, which can take up resources.
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False, This turns it off from Flask.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
